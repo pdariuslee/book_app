@@ -24,8 +24,6 @@ app.use(express.urlencoded({extended: true}));
 //   res.render('pages/index');
 // });
 
-app.use(express.static('./views/pages/searches'));
-app.use(express.urlencoded({extended: true}));
 
 
 app.get('/searches/new', (req, res) => {
@@ -48,7 +46,7 @@ function sendGoogleBooksApiData(req, res){
     .then( apiData => {
 
       // res.send(apiData.body.items);
-
+      // throw new Error('this is my error');
 
       const gApiData = apiData.body.items.map( data => new Book(data));
 
@@ -61,8 +59,9 @@ function sendGoogleBooksApiData(req, res){
 
     })
     .catch(error => {
-      console.log(error);
-      res.status(500).send(error.message);
+      // console.log(error);
+      // res.status(500).send(error.message);
+      res.render('pages/error');
     });
 
 }
