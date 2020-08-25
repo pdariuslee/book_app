@@ -1,3 +1,37 @@
+
+
+div{
+  background-color: gray;
+  /* outline: 5px solid orange; */
+  width: 50%;
+  margin: 10px auto;
+  padding: 20px 20px;
+  /* list-style: none; */
+}
+
 h1{
-  background-color: orange;
+  /* outline: 5px solid orange; */
+  color: white;
+  margin: 0 auto;
+  text-align: center;
+}
+
+h2{
+  /* outline: 5px solid orange; */
+  color: #533434;
+  margin: 0 auto;
+  text-align: center;
+}
+
+img{
+  /* outline: 5px solid orange; */
+  color: orange;
+  margin: 0 auto;
+  width: 200px;
+  height: 200px;
+  display: block;
+}
+
+p{
+  color: rgb(34, 20, 20);
 }
