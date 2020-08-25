@@ -22,8 +22,12 @@ app.use(express.urlencoded({extended: true}));
 
 app.get('/hello', (req,res) => {
   res.render('pages/index');
-})
+});
 
+
+app.get('/searchBy', (req, res) => {
+  res.render('pages/searches/new');
+});
 
 // ============ start server ============
 
