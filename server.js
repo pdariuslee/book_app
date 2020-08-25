@@ -32,22 +32,15 @@ app.get('/searches/new', (req, res) => {
   res.render('pages/searches/new');
 });
 
+app.post('/searches', sendGoogleBooksApiData);
+
 // ============ routes  ============
 
 
 
 function sendGoogleBooksApiData(req, res){
 
-  // res.render('pages/searches/new');
-
-  // console.log(req.body.volumeInfo);
-
   let searchQuery = req.body.title;
-
-  // console.log('wutttttt ' + searchQuery);
-
-  // const urlToGoogleApi = `https://www.googleapis.com/books/v1/volumes?q=${search_query}`;
-
 
   const urlToGoogleApi = `https://www.googleapis.com/books/v1/volumes?q=+intitle:${searchQuery}`;
 
@@ -55,18 +48,16 @@ function sendGoogleBooksApiData(req, res){
     .then( apiData => {
 
       // res.send(apiData.body.items);
-      // console.log(apiData.body.items[0].volumeInfo);
-
-      // console.log(apiData.body.items[0].volumeInfo.title);
-
-      // res.send(apiData.body.items[1].volumeInfo);
-
 
 
       const gApiData = apiData.body.items.map( data => new Book(data));
 
       // console.log(gApiData);
       // res.send(gApiData);
+
+      res.render('pages/searches/show', {
+        itemObjectArray : gApiData
+      });
 
     })
     .catch(error => {
@@ -83,6 +74,8 @@ function sendGoogleBooksApiData(req, res){
 function Book(obj){
   this.title = obj.volumeInfo.title;
   this.author = obj.volumeInfo.authors;
+  this.desc = obj.volumeInfo.description;
+  this.img = obj.volumeInfo.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
 
 }
 

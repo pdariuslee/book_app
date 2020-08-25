@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <!-- {
+    "title": "The Magic of Harry Potter",
+    "author": [
+      "Daniel Mitchell"
+    ],
+    "desc": "The Harry Potter books by J. K. Rowling have been phenomenal bestsellers winning fans world wide. These essays look at the magic, literary devices and moral themes in the Harry Potter series. In addition, the controversy between Christians over the moral themes is discussed.",
+    "img": "http://books.google.com/books/content?id=c_KYSDoCYQ4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+  }, -->
+  
+  <ul>
+
+   <% for(let i = 0; i < itemObjectArray.length; i++){ %>
+      <li>
+        <img src=<%= itemObjectArray[i].img%>>
+        <h1><%= itemObjectArray[i].title %></h1>
+        <h2><%= itemObjectArray[i].author %></h2>
+        <p><%= itemObjectArray[i].desc %></p>
+      </li>
+    <% } %>
+</ul>
+
+  
+</body>
+</html>
