@@ -41,18 +41,43 @@ app.get('/searches/new', (req, res) => {
 
 app.post('/searches', sendGoogleBooksApiData);
 
+app.post('/books', addBookToDB);
+
 // ============ routes  ============
 
-function retrieveSingleBook(req, res){
+function addBookToDB(req, res){
 
-  // console.log(req.params);
-  // res.send(req.params);
+  console.log(req.body.booksOptions);
+  const {author, title, isbn, image_url, description} = JSON.parse(req.body.booksOptions);
+
+  // console.log({author, title, isbn, image_url, description});
+
+
+
+  const SQL = `INSERT INTO books 
+    (author, title, isbn, image_url, description) 
+    VALUES($1, $2, $3, $4, $5)`;
+  const valuesArray = [author, title, isbn, image_url, description];
+
+  client.query(SQL, valuesArray).then(() => {
+    // throw new Error('you done goofed');
+    res.redirect('/');
+  }).catch((error) => handleError(error, res));
+
+}
+
+function handleError(error, res){
+  console.error(error);
+  res.render('pages/errors', {error});
+}
+
+function retrieveSingleBook(req, res){
 
 
   client.query('SELECT * FROM books WHERE id=$1', [req.params.id])
     .then(result => {
 
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
       res.render('pages/books/detail', {id : result.rows[0]});
     });
 
@@ -95,7 +120,7 @@ function sendGoogleBooksApiData(req, res){
       // console.log(apiData.body.items[0].volumeInfo.industryIdentifiers[0].identifier);
       // res.render(gApiData);
 
-      console.log(gApiData);
+      // console.log(gApiData);
 
       res.render('pages/searches/show', {
         itemObjectArray : gApiData
@@ -103,8 +128,7 @@ function sendGoogleBooksApiData(req, res){
 
     })
     .catch(error => {
-      // console.log(error);
-      // res.status(500).send(error.message);
+
       res.render('pages/error');
     });
 

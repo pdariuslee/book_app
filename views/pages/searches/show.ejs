@@ -11,14 +11,23 @@
 </head>
 <body>
 
-  <!-- {
-    "title": "The Magic of Harry Potter",
-    "author": [
-      "Daniel Mitchell"
-    ],
-    "desc": "The Harry Potter books by J. K. Rowling have been phenomenal bestsellers winning fans world wide. These essays look at the magic, literary devices and moral themes in the Harry Potter series. In addition, the controversy between Christians over the moral themes is discussed.",
-    "img": "http://books.google.com/books/content?id=c_KYSDoCYQ4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-  }, -->
+  
+  <form action="/books" method="POST"><!-- Name the GET, POST, PUT, DELETE the same for a single resource-->
+    <fieldset>
+      <legend>Add a book to collection</legend>
+
+        <select name='booksOptions'>
+
+        <% for(let i = 0; i < itemObjectArray.length; i++){ %>
+          <option value='<%= JSON.stringify(itemObjectArray[i]) %>'> <%= itemObjectArray[i].title %> </option>
+        <% } %>
+
+      </select>
+
+      <input type="submit" value="add book to collection">
+    </fieldset>
+  </form>
+
   
   <ul>
 
