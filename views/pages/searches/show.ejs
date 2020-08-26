@@ -10,24 +10,6 @@
 
 </head>
 <body>
-
-  
-  <form action="/books" method="POST"><!-- Name the GET, POST, PUT, DELETE the same for a single resource-->
-    <fieldset>
-      <legend>Add a book to collection</legend>
-
-        <select name='booksOptions'>
-
-        <% for(let i = 0; i < itemObjectArray.length; i++){ %>
-          <option value='<%= JSON.stringify(itemObjectArray[i]) %>'> <%= itemObjectArray[i].title %> </option>
-        <% } %>
-
-      </select>
-
-      <input type="submit" value="add book to collection">
-    </fieldset>
-  </form>
-
   
   <ul>
 
@@ -37,8 +19,22 @@
         <img src=<%= itemObjectArray[i].image_url%>>
         <h1><%= itemObjectArray[i].title %></h1>
         <h2><%= itemObjectArray[i].author %></h2>
-        <p><%= itemObjectArray[i].description %></p>
+        <p>Description: <%= itemObjectArray[i].description %></p>
         <p>ISBN: <%= itemObjectArray[i].isbn %></p>
+        <p>Category: <%= itemObjectArray[i].categories %></p>
+
+      <form action="/books" method="POST">
+        <input type="hidden" name="author" value="<%= itemObjectArray[i].author %>">
+        <input type="hidden" name="title" value="<%= itemObjectArray[i].title %>">
+        <input type="hidden" name="isbn" value="<%= itemObjectArray[i].isbn %>">
+        <input type="hidden" name="image_url" value="<%= itemObjectArray[i].image_url%>">
+        <input type="hidden" name="description" value="<%= itemObjectArray[i].description %>">
+        <input type="hidden" name="categories" value="<%= itemObjectArray[i].categories %>">
+
+
+        <input type="submit" value="save book">
+      </form>
+
       </div>
       <!-- </li> -->
     <% } %>
