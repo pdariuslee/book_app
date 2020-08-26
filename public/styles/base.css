@@ -1,17 +1,23 @@
 
 
+body{
+  /* outline: 2px solid blue; */
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
 div{
   background-color: gray;
   /* outline: 5px solid orange; */
-  width: 50%;
-  margin: 10px auto;
+  width: 80%;
+  margin: 0 auto;
   padding: 20px 20px;
   /* list-style: none; */
 }
 
 h1{
   /* outline: 5px solid orange; */
-  color: white;
+  color: rgb(156, 153, 153);
   margin: 0 auto;
   text-align: center;
 }
