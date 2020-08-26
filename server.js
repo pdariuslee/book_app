@@ -4,6 +4,9 @@
 
 const express = require('express');
 const superagent = require('superagent');
+const pg = require('pg');
+require('dotenv').config();
+
 
 
 
@@ -11,7 +14,8 @@ const superagent = require('superagent');
 
 const PORT = process.env.PORT || 3003;
 const app = express();
-
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', (error) => console.error(error));
 
 // ============ express configs ============
 
@@ -20,10 +24,15 @@ app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 app.use(express.urlencoded({extended: true}));
 
-// app.get('/hello', (req,res) => {
+// app.get('/', (req,res) => {
+//   retrieveArrOfBooks();
 //   res.render('pages/index');
+
 // });
 
+app.get('/books/:id', retrieveSingleBook);
+
+app.get('/', retrieveArrOfBooks);
 
 
 app.get('/searches/new', (req, res) => {
@@ -33,6 +42,39 @@ app.get('/searches/new', (req, res) => {
 app.post('/searches', sendGoogleBooksApiData);
 
 // ============ routes  ============
+
+function retrieveSingleBook(req, res){
+
+  // console.log(req.params);
+  // res.send(req.params);
+
+
+  client.query('SELECT * FROM books WHERE id=$1', [req.params.id])
+    .then(result => {
+
+      console.log(result.rows[0]);
+      res.render('pages/books/detail', {id : result.rows[0]});
+    });
+
+
+}
+
+function retrieveArrOfBooks(req, res){
+
+  client.query('SELECT * FROM books')
+    .then(result => {
+
+      // console.log(result.rows.length);
+
+      let countBooks = result.rows.length;
+
+      res.render('pages/index', {
+        itemObjectArray : result.rows,
+        numOfBooksInDB : countBooks
+      });
+    });
+
+}
 
 
 
@@ -50,8 +92,10 @@ function sendGoogleBooksApiData(req, res){
 
       const gApiData = apiData.body.items.map( data => new Book(data));
 
-      // console.log(gApiData);
-      // res.send(gApiData);
+      // console.log(apiData.body.items[0].volumeInfo.industryIdentifiers[0].identifier);
+      // res.render(gApiData);
+
+      console.log(gApiData);
 
       res.render('pages/searches/show', {
         itemObjectArray : gApiData
@@ -71,10 +115,14 @@ function sendGoogleBooksApiData(req, res){
 // ============ other functionalities  ============
 
 function Book(obj){
-  this.title = obj.volumeInfo.title;
-  this.author = obj.volumeInfo.authors;
-  this.desc = obj.volumeInfo.description;
-  this.img = obj.volumeInfo.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
+
+  const data = obj.volumeInfo;
+
+  this.title = data.title;
+  this.author = data.authors;
+  this.isbn = data.industryIdentifiers[0].identifier;
+  this.description = data.description;
+  this.image_url = data.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
 
 }
 
@@ -82,4 +130,7 @@ function Book(obj){
 // ============ start server ============
 
 
-app.listen(PORT, () => console.log(`we are running on PORT : ${PORT}`));
+client.connect()
+  .then(() => {
+    app.listen(PORT, () => console.log(`we did it, its up on ${PORT}`));
+  });

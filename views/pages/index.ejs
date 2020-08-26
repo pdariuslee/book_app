@@ -8,7 +8,24 @@
 </head>
 <body>
 
-    <h1>Hello World</h1>
+    <h1>Hello World!</h1>
+
+    <h2>Books saved: <%= numOfBooksInDB %></h2>
+
+    <ul>
+
+      <% for(let i = 0; i < itemObjectArray.length; i++){ %>
+         <!-- <li> -->
+         <div>
+           <img src=<%= itemObjectArray[i].image_url%>>
+           <h1><%= itemObjectArray[i].title %></h1>
+           <h2><%= itemObjectArray[i].author %></h2>
+           <p><%= itemObjectArray[i].description %></p>
+           <p>ISBN: <%= itemObjectArray[i].isbn %></p>
+         </div>
+         <!-- </li> -->
+       <% } %>
+   </ul>
   
 </body>
 </html>

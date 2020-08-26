@@ -23,3 +23,15 @@
 
 ## Credits and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+
+---
+
+Number and name of feature: Components and Forms
+
+Estimate of time needed to complete: 6-8 hrs
+
+Start time: 3:30pm
+
+Finish time: _____
+
+Actual time needed to complete: _____

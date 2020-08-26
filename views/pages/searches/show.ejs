@@ -25,10 +25,11 @@
    <% for(let i = 0; i < itemObjectArray.length; i++){ %>
       <!-- <li> -->
       <div>
-        <img src=<%= itemObjectArray[i].img%>>
+        <img src=<%= itemObjectArray[i].image_url%>>
         <h1><%= itemObjectArray[i].title %></h1>
         <h2><%= itemObjectArray[i].author %></h2>
-        <p><%= itemObjectArray[i].desc %></p>
+        <p><%= itemObjectArray[i].description %></p>
+        <p>ISBN: <%= itemObjectArray[i].isbn %></p>
       </div>
       <!-- </li> -->
     <% } %>
