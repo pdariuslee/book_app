@@ -24,16 +24,13 @@ app.set('view engine', 'ejs');
 app.use(express.static('./public'));
 app.use(express.urlencoded({extended: true}));
 
-// app.get('/', (req,res) => {
-//   retrieveArrOfBooks();
-//   res.render('pages/index');
 
-// });
+// ============ routes  ============
+
 
 app.get('/books/:id', retrieveSingleBook);
 
 app.get('/', retrieveArrOfBooks);
-
 
 app.get('/searches/new', (req, res) => {
   res.render('pages/searches/new');
@@ -43,33 +40,40 @@ app.post('/searches', sendGoogleBooksApiData);
 
 app.post('/books', addBookToDB);
 
-// ============ routes  ============
+
+
+// ============ functions  ============
 
 function addBookToDB(req, res){
 
-  console.log(req.body.booksOptions);
-  const {author, title, isbn, image_url, description} = JSON.parse(req.body.booksOptions);
+  // console.log(req.body.booksOptions);
+  const {author, title, isbn, image_url, description, categories} = req.body;
 
   // console.log({author, title, isbn, image_url, description});
 
 
 
   const SQL = `INSERT INTO books 
-    (author, title, isbn, image_url, description) 
-    VALUES($1, $2, $3, $4, $5)`;
-  const valuesArray = [author, title, isbn, image_url, description];
+    (author, title, isbn, image_url, description, categories) 
+    VALUES($1, $2, $3, $4, $5, $6) RETURNING id`;
+  const valuesArray = [author, title, isbn, image_url, description, categories];
 
-  client.query(SQL, valuesArray).then(() => {
+  client.query(SQL, valuesArray).then((dbResult) => {
     // throw new Error('you done goofed');
-    res.redirect('/');
+
+    const newID = dbResult.rows[0].id;
+
+    res.redirect(`/books/${newID}`);
   }).catch((error) => handleError(error, res));
 
 }
+
 
 function handleError(error, res){
   console.error(error);
   res.render('pages/errors', {error});
 }
+
 
 function retrieveSingleBook(req, res){
 
@@ -79,7 +83,7 @@ function retrieveSingleBook(req, res){
 
       // console.log(result.rows[0]);
       res.render('pages/books/detail', {id : result.rows[0]});
-    });
+    }).catch((error) => handleError(error, res));
 
 
 }
@@ -97,7 +101,7 @@ function retrieveArrOfBooks(req, res){
         itemObjectArray : result.rows,
         numOfBooksInDB : countBooks
       });
-    });
+    }).catch((error) => handleError(error, res));
 
 }
 
@@ -105,9 +109,17 @@ function retrieveArrOfBooks(req, res){
 
 function sendGoogleBooksApiData(req, res){
 
-  let searchQuery = req.body.title;
+  let searchQuery;
 
-  const urlToGoogleApi = `https://www.googleapis.com/books/v1/volumes?q=+intitle:${searchQuery}`;
+  let urlToGoogleApi = ``;
+
+  if(req.body.title){
+    searchQuery = req.body.title;
+    urlToGoogleApi = `https://www.googleapis.com/books/v1/volumes?q=+intitle:${searchQuery}`;
+  } else{
+    searchQuery = req.body.author;
+    urlToGoogleApi = `https://www.googleapis.com/books/v1/volumes?q=+inauthor:${searchQuery}`;
+  }
 
   superagent.get(urlToGoogleApi)
     .then( apiData => {
@@ -117,10 +129,7 @@ function sendGoogleBooksApiData(req, res){
 
       const gApiData = apiData.body.items.map( data => new Book(data));
 
-      // console.log(apiData.body.items[0].volumeInfo.industryIdentifiers[0].identifier);
-      // res.render(gApiData);
-
-      // console.log(gApiData);
+      // res.send(gApiData);
 
       res.render('pages/searches/show', {
         itemObjectArray : gApiData
@@ -136,7 +145,7 @@ function sendGoogleBooksApiData(req, res){
 
 
 
-// ============ other functionalities  ============
+// ============ constructor   ============
 
 function Book(obj){
 
@@ -147,6 +156,7 @@ function Book(obj){
   this.isbn = data.industryIdentifiers[0].identifier;
   this.description = data.description;
   this.image_url = data.imageLinks.thumbnail || 'https://i.imgur.com/J5LVHEL.jpg';
+  this.categories = data.categories;
 
 }
 
