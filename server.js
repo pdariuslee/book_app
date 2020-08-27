@@ -40,9 +40,36 @@ app.post('/searches', sendGoogleBooksApiData);
 
 app.post('/books', addBookToDB);
 
+app.put('/books/:id', updateBook);
+
 
 
 // ============ functions  ============
+
+function updateBook(req, res){
+
+  console.log('about sa updatebfnctn');
+
+  const SQL = `UPDATE books SET
+                author=$1,
+                title=$2,
+                isbn=$3,
+                image_url=$4,
+                description=$5,
+                categories=$6 WHERE id=$7`;
+
+  const values = [req.body.author, req.body.title, req.body.isbn, req.body.image_url, req.body.description, req.body.categories, req.params.id];
+
+  console.log(values);
+
+  client.query(SQL, values)
+    .then((result) => {
+      console.log(result);
+      res.redirect(`/books/${id}`);
+    })
+    .catch((error) => handleError(error, res));
+}
+
 
 function addBookToDB(req, res){
 
@@ -82,7 +109,7 @@ function retrieveSingleBook(req, res){
     .then(result => {
 
       // console.log(result.rows[0]);
-      res.render('pages/books/detail', {id : result.rows[0]});
+      res.render('pages/books/detail', {book : result.rows[0]});
     }).catch((error) => handleError(error, res));
 
 
