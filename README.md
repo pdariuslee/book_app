@@ -32,6 +32,20 @@ Estimate of time needed to complete: 6-8 hrs
 
 Start time: 3:30pm
 
-Finish time: _____
+Finish time: 4:00pm (next day)
 
-Actual time needed to complete: _____
+Actual time needed to complete: 10hrs
+
+---
+
+
+Number and name of feature: Resource Update and Delete
+
+Estimate of time needed to complete: 6-8 hrs
+
+Start time: 4:00pm
+
+Finish time: incomplete
+
+Actual time needed to complete:
+

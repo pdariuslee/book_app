@@ -15,14 +15,142 @@
     <h1>detail ejs</h1>
 
     <div>
-      <img src=<%= id.image_url%>>
-      <h1><%= id.title %></h1>
-      <h2><%= id.author %></h2>
-      <p><%= id.description %></p>
-      <p>ISBN: <%= id.isbn %></p>
+      <img src=<%= book.image_url%>>
+      <h1><%= book.title %></h1>
+      <h2><%= book.author %></h2>
+      <p><%= book.description %></p>
+      <p>ISBN: <%= book.isbn %></p>
+      <p>Bookshelf: <%= book.categories %></p>
     </div>
 
-    
+
+      <!-- <button id="myBtn">Update Book</button> -->
+
+
+      <!-- <input disabled type="submit" value="Delete Book"> -->
+
+
+
+    <!-- https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal -->
+    <!-- ========== modal box ========== -->
+
+  <!-- ===== style ========== -->
+
+
+    <style>
+      body {font-family: Arial, Helvetica, sans-serif;}
+      
+      /* The Modal (background) */
+      .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+      
+      /* Modal Content */
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+      
+      /* The Close Button */
+      .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+      
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      </style>
+
+ <!-- ===== html ========== -->
+
+ <!-- <h2>Modal Example</h2> -->
+
+ <!-- Trigger/Open The Modal -->
+ <button id="myBtn">Update Details</button>
+
+ <input disabled type="submit" value="Delete Book">
+
+ 
+ <!-- The Modal -->
+ <div id="myModal" class="modal">
+ 
+   <!-- Modal content -->
+   <div class="modal-content">
+     <span class="close">&times;</span>
+
+     <form action="/books/<%= book.id %>?_method=PUT" method="POST">
+        
+        <input style="width: 80%;margin-bottom: 10px;" type="text" name="title" value="<%= book.title %>">
+        <input style="width: 80%;margin-bottom: 10px;" type="text" name="author" value="<%= book.author %>">
+        <input style="width: 80%;margin-bottom: 10px;" type="text" name="isbn" value="<%= book.isbn %>">
+        <input style="width: 80%;margin-bottom: 10px;" type="text" name="image_url" value="<%= book.image_url %>">
+        <textarea cols="67%" rows="10%" name="description"><%= book.description %></textarea>
+
+        <select name="categories" style="display: block; width: 80%;">
+          <option><%= book.categories %></option>
+          <option>2</option>
+        </select>
+
+        <input type="text" name="id" value="<%= book.id %>" style="display: none;">
+
+        <input  style="display: block;margin: 20px 20px 20px 80%;" type="submit" value="Update Book">
+
+    </form>
+     
+
+   </div>
+ 
+ </div>
+
+ <!-- ===== js ========== -->
+
+ <script>
+  // Get the modal
+  var modal = document.getElementById("myModal");
+  
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+  
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  </script>
+
     
   </body>
 </html>
