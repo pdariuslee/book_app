@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 3003;
 const app = express();
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', (error) => console.error(error));
+const methodOverride = require('method-override');
 
 // ============ express configs ============
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({extended: true}));
 
 // ============ routes  ============
 
+app.use(methodOverride('_method'));
 
 app.get('/books/:id', retrieveSingleBook);
 
@@ -42,13 +44,24 @@ app.post('/books', addBookToDB);
 
 app.put('/books/:id', updateBook);
 
-
+app.delete('/books/:id', deleteSingleBook);
 
 // ============ functions  ============
 
+
+
+function deleteSingleBook(req, res){
+
+  client.query('DELETE FROM books WHERE id=$1', [req.params.id])
+    .then(() => {
+      res.redirect('/');
+    });
+
+}
+
 function updateBook(req, res){
 
-  console.log('about sa updatebfnctn');
+  // console.log('entered updatebook func');
 
   const SQL = `UPDATE books SET
                 author=$1,
@@ -56,18 +69,21 @@ function updateBook(req, res){
                 isbn=$3,
                 image_url=$4,
                 description=$5,
-                categories=$6 WHERE id=$7`;
+                categories=$6 WHERE id=$7;`;
 
   const values = [req.body.author, req.body.title, req.body.isbn, req.body.image_url, req.body.description, req.body.categories, req.params.id];
 
-  console.log(values);
+  let bookId = req.params.id;
 
   client.query(SQL, values)
     .then((result) => {
-      console.log(result);
-      res.redirect(`/books/${id}`);
+      // console.log(result);
+      res.redirect(`/books/${bookId}`);
     })
     .catch((error) => handleError(error, res));
+
+      // .then((res.redirect(`/books/${bookId}`))
+      //   .catch((error) => handleError(error, res)));
 }
 
 
@@ -78,6 +94,7 @@ function addBookToDB(req, res){
 
   // console.log({author, title, isbn, image_url, description});
 
+  // console.log('entered a book');
 
 
   const SQL = `INSERT INTO books 
@@ -115,6 +132,8 @@ function retrieveSingleBook(req, res){
 
 }
 
+
+
 function retrieveArrOfBooks(req, res){
 
   client.query('SELECT * FROM books')
@@ -123,6 +142,8 @@ function retrieveArrOfBooks(req, res){
       // console.log(result.rows.length);
 
       let countBooks = result.rows.length;
+
+      // console.log(result.rows);
 
       res.render('pages/index', {
         itemObjectArray : result.rows,

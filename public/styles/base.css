@@ -59,3 +59,7 @@ form{
   /* outline: 5px solid orange; */
 
 }
+
+li{
+ list-style: none;
+}

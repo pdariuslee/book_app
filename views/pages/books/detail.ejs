@@ -85,9 +85,16 @@
  <!-- <h2>Modal Example</h2> -->
 
  <!-- Trigger/Open The Modal -->
- <button id="myBtn">Update Details</button>
+ <!-- <button id="myBtn">Update Details</button> -->
 
- <input disabled type="submit" value="Delete Book">
+ <button style="margin-bottom: 10px;" id="myBtn">Update Details</button>
+
+
+ <form action="/books/<%= book.id %>?_method=DELETE" method="post">
+
+  <input style="margin-bottom: 50px;" type="submit" value="Delete Book">
+
+</form>
 
  
  <!-- The Modal -->
@@ -97,13 +104,13 @@
    <div class="modal-content">
      <span class="close">&times;</span>
 
-     <form action="/books/<%= book.id %>?_method=PUT" method="POST">
+     <form action="/books/<%= book.id %>?_method=PUT" method="post">
         
         <input style="width: 80%;margin-bottom: 10px;" type="text" name="title" value="<%= book.title %>">
         <input style="width: 80%;margin-bottom: 10px;" type="text" name="author" value="<%= book.author %>">
         <input style="width: 80%;margin-bottom: 10px;" type="text" name="isbn" value="<%= book.isbn %>">
         <input style="width: 80%;margin-bottom: 10px;" type="text" name="image_url" value="<%= book.image_url %>">
-        <textarea cols="67%" rows="10%" name="description"><%= book.description %></textarea>
+        <textarea cols="67" rows="10" name="description"><%= book.description %></textarea>
 
         <select name="categories" style="display: block; width: 80%;">
           <option><%= book.categories %></option>
@@ -111,10 +118,18 @@
         </select>
 
         <input type="text" name="id" value="<%= book.id %>" style="display: none;">
-
+        
         <input  style="display: block;margin: 20px 20px 20px 80%;" type="submit" value="Update Book">
 
+
     </form>
+
+    <!-- <form action="/books/<%= book.id %>?_method=DELETE" method="post">
+
+      <input  style="display: block;margin: 20px 20px 20px 80%;" type="submit" value="Delete Book">
+
+    </form> -->
+
      
 
    </div>
